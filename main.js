@@ -52,13 +52,18 @@ function TicTacToe() {
     this.updateAvailableCells(cell);
     this.p1Cells.push(cell);
 
+    // update board to show it is the other users turn
     this.playerIndicator();
+
+    // check if game is over
     const gameOver = this.isGameOver(this.player);
     this.move++;
 
     if (gameOver) {
       winnerstatus.innerHTML = `${this.player} wins in ${this.move} moves!`;
       this.availableCells = [];
+
+      // if not over, let AI go
     } else if (this.availableCells.length !== 0) {
       if (this.gameType === 'ai') {
         this.computerMoves();
@@ -107,18 +112,17 @@ function TicTacToe() {
 
   this.minimax = function(newBoard, player) {
     const availSpots = this.emptyIndexies(newBoard);
-    // const availSpots = this.availableCells;
     /* checks for the terminal states such as win, lose, and tie
     and returning a value accordingly */
     if (this.isGameOver(this.player)) {
-      return { score: -10 };
+      return { score: -10 }; // return the lowest score for the player
     } else if (this.isGameOver(this.computer)) {
       return { score: 10 };
     } else if (availSpots.length === 0) {
       return { score: 0 };
     }
 
-    // an array to collect all the objects
+    // an array to collect all the move objects
     const moves = [];
 
     for (let i = 0; i < availSpots.length; i++) {
@@ -165,7 +169,7 @@ function TicTacToe() {
     return moves[bestMove];
   };
 
-  // returns the available spots on the board
+  // returns the available spots on the board for the minimax algorithm
   this.emptyIndexies = function(board) {
     return board.filter(s => s !== 'O' && s !== 'X');
   };
@@ -248,17 +252,16 @@ function TicTacToe() {
   };
 
   this.clearBoard = function() {
-    let element;
     this.board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     this.availableCells = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
     this.p1Cells = [];
-    this.computerCells = [];
+    this.p2Cells = [];
     this.move = 0;
     this.aiturn = this.player === 'X' ? false : true;
 
     // clear board
     for (let i = 0; i < 9; i++) {
-      element = `box${i}`;
+      letelement = `box${i}`;
       document.querySelector(`#${element}`).innerHTML = '';
     }
   };
@@ -279,13 +282,10 @@ function TicTacToe() {
 
   this.reset = function() {
     this.restart();
-    this.gameType = 'ai';
+    // show the user the home menu again
     $('.grid').fadeOut(400);
     grid.style.display = 'none';
     menu.style.display = 'block';
-    if (this.computer === 'X') {
-      this.computerMoves();
-    }
   };
 
   this.nameSetup = function() {
@@ -302,7 +302,7 @@ function TicTacToe() {
     menu.style.display = 'none';
     $('.grid').fadeIn(400);
     grid.style.display = 'flex';
-    if (this.aiturn && this.gameType === 'ai') {
+    if (this.computer === 'X' && this.aiturn && this.gameType === 'ai') {
       this.computerMoves();
     }
   };
