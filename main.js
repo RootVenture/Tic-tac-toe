@@ -261,7 +261,7 @@ function TicTacToe() {
 
     // clear board
     for (let i = 0; i < 9; i++) {
-      letelement = `box${i}`;
+      const element = `box${i}`;
       document.querySelector(`#${element}`).innerHTML = '';
     }
   };
